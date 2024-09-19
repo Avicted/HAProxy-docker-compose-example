@@ -1,0 +1,25 @@
+# Ignore Vagrant-related files
+.vagrant/
+
+# Ignore Vagrant box downloads
+*.box
+
+# Ignore log files
+logs/
+*.log
+
+# Ignore temporary files
+tmp/
+*.tmp
+*.swp
+
+# Ignore system-specific files
+.DS_Store  # macOS
+Thumbs.db  # Windows
+
+# Ignore IDE/Editor files
+.vscode/
+*.code-workspace
+
+# Ignore environment configuration files
+.env

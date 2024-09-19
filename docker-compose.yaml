@@ -1,0 +1,20 @@
+services:
+  haproxy:
+    image: haproxy:latest
+    container_name: haproxy
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    ports:
+      - "80:80"
+      - "8404:8404"
+    depends_on:
+      - web1
+      - web2
+
+  web1:
+    image: jmalloc/echo-server:latest
+    container_name: web1
+
+  web2:
+    image: jmalloc/echo-server:latest
+    container_name: web2

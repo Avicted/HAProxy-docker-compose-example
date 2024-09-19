@@ -1,0 +1,59 @@
+# Define constants
+PROJECT_DIR = Dir.pwd
+GUEST_FOLDER = "/home/vagrant/HAProxy-docker-compose-example/"
+
+Vagrant.configure("2") do |config|
+    # Specify the box to use
+    config.vm.box = "generic/debian12"
+                                                         # Configure the network to use bridged mode
+    config.vm.network "public_network", bridge: "enp5s0" # Adjust to your network adapter  !!!
+  
+    config.vm.hostname = "debian-HAProxy-vm"
+
+    # Dynamically set the synced folder to the current working directory
+    config.vm.synced_folder Dir.pwd, GUEST_FOLDER
+
+    # Port forwarding from guest (Vagrant box) to host machine
+    config.vm.network "forwarded_port", guest: 80, host: 8080   # Expose HTTP on host 8080
+    config.vm.network "forwarded_port", guest: 8404, host: 8404 # Expose HAProxy stats page
+    
+    
+    # Optional: Provision with a shell script (add any additional setup you need)
+    config.vm.provision "shell", inline: <<-SHELL
+        apt-get update
+
+        # Add Docker's official GPG key:
+        sudo apt-get update
+        sudo apt-get install ca-certificates curl
+        sudo install -m 0755 -d /etc/apt/keyrings
+        sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+        sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+        # Add the repository to Apt sources:
+        echo \
+        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+        $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+        sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo apt-get update
+
+        sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+        sudo usermod -aG docker vagrant
+
+        sudo docker run hello-world
+
+        echo "      Hello Sailor Docker has been installed !"
+        echo ""
+        uname -a
+
+        # Install Docker Compose
+        sudo apt-get install docker-compose-plugin
+        docker compose version
+
+        # Start HAproxy with the applications
+        cd #{GUEST_FOLDER}
+        echo "Current directory is $(pwd)"
+
+        docker compose up -d
+     SHELL
+  end
