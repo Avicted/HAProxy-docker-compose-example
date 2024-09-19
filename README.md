@@ -13,7 +13,7 @@ This is a simple docker compose file to run HAProxy in a container with a simple
 You can also use Vagrant (Debian) to run HAProxy and the web server. 
 
 Adjust the **config.vm.network** network adapter to your needs in the **vagrantfile**<br> 
-I use tested this with my primary network adapter.
+I tested this with my primary network adapter.
 
 Just run `vagrant up` and access:
 -  HAProxy stats at [http://localhost:8404](http://localhost:8404)
