@@ -1,11 +1,11 @@
-# HAproxy docker compose
+# HAProxy docker compose
 This is a simple docker compose file to run HAProxy in a container with a simple web server (jmalloc/echo-server) as the backend.
 
 ## Usage
 1. Clone the repository
 2. Run `docker compose up -d`
     - `docker compose logs -f` to see the logs
-3. Access HAproxy stats at [http://localhost:8404](http://localhost:8404)
+3. Access HAProxy stats at [http://localhost:8404](http://localhost:8404)
 4. Access web (jmalloc/echo-server) at [http://localhost](http://localhost)
 
 
